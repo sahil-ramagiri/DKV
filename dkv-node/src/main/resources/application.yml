@@ -1,0 +1,9 @@
+logging.level:
+  root: INFO
+  org.springframework.boot: ERROR
+  org.springframework.web: INFO
+  org:
+    springframework:
+      web:
+        filter:
+          CommonsRequestLoggingFilter: OFF

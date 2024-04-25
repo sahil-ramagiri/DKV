@@ -9,7 +9,7 @@ public class ReplicaRaftModelFactory extends DefaultRaftModelFactory {
     @Override
     @Nonnull
     public LogEntry.LogEntryBuilder createLogEntryBuilder() {
-        return LogEntryOrBuilder.builder().build();
+        return new LogEntryOrBuilder();
     }
 
 

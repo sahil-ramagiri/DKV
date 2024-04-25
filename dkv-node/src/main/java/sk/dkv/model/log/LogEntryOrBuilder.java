@@ -1,42 +1,48 @@
 package sk.dkv.model.log;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.microraft.model.log.LogEntry;
-import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import sk.dkv.KVOperation;
 
-
-@Builder
+@NoArgsConstructor
+@Data
 public class LogEntryOrBuilder implements LogEntry, LogEntry.LogEntryBuilder {
 
     private int term;
     private long index;
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
     private KVOperation operation;
 
-    private final LogEntryOrBuilderBuilder builder = new LogEntryOrBuilderBuilder();
+    private String type;
 
     @Override
     public LogEntry.LogEntryBuilder setIndex(long index) {
-        builder.index(index);
+        this.index = index;
         return this;
     }
 
     @Override
     public LogEntry.LogEntryBuilder setTerm(int term) {
-        builder.term(term);
+        this.term = term;
         return this;
     }
 
     @Override
     public LogEntry.LogEntryBuilder setOperation(Object operation) {
-        if (!(operation instanceof KVOperation kvOperation))
+        if (!(operation instanceof KVOperation kvOperation)) {
             throw new IllegalArgumentException(STR."Invalid operation: \{operation}");
-        builder.operation(kvOperation);
+        }
+        this.operation = kvOperation;
+        this.type = kvOperation.getClass().getName();
         return this;
     }
 
     @Override
     public LogEntry build() {
-        return builder.build();
+        return this;
     }
 
     @Override

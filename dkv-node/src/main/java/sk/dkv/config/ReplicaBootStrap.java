@@ -7,22 +7,18 @@ import com.fasterxml.jackson.databind.module.SimpleAbstractTypeResolver;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import io.microraft.RaftEndpoint;
 import io.microraft.RaftNode;
-import io.microraft.model.impl.log.DefaultLogEntryOrBuilder;
 import io.microraft.model.log.LogEntry;
 import io.microraft.persistence.RaftStore;
 import io.microraft.statemachine.StateMachine;
 import io.microraft.transport.Transport;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import sk.dkv.ReplicaId;
-import sk.dkv.config.ReplicaConfig;
+import sk.dkv.model.ReplicaRaftModelFactory;
+import sk.dkv.model.log.LogEntryOrBuilder;
 
 @Configuration
 public class ReplicaBootStrap {
@@ -34,7 +30,7 @@ public class ReplicaBootStrap {
         SimpleModule module = new SimpleModule("CustomModel", Version.unknownVersion());
         SimpleAbstractTypeResolver resolver = new SimpleAbstractTypeResolver();
         resolver.addMapping(RaftEndpoint.class, ReplicaId.class);
-        resolver.addMapping(LogEntry.class, DefaultLogEntryOrBuilder.class);
+        resolver.addMapping(LogEntry.class, LogEntryOrBuilder.class);
         module.setAbstractTypes(resolver);
 
         return new ObjectMapper()
@@ -62,6 +58,7 @@ public class ReplicaBootStrap {
                 .setTransport(transport)
                 .setStateMachine(stateMachine)
                 .setStore(raftStore)
+                .setModelFactory(new ReplicaRaftModelFactory())
                 .build();
     }
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static java.util.Objects.requireNonNull;
@@ -15,7 +16,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j
 public class ReplicaState implements StateMachine {
 
-    private final LinkedHashMap<String, String> map = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> map = new LinkedHashMap<>();
 
     @Override
     public Object runOperation(long commitIndex, @Nonnull Object operation) {
@@ -35,14 +36,21 @@ public class ReplicaState implements StateMachine {
 
     @Override
     public void takeSnapshot(long l, Consumer<Object> consumer) {
-        log.info("Preparing Snapshot");
-        return;
+        log.info("Preparing Snapshot with {} entries", map.size());
+        consumer.accept(map);
     }
 
     @Override
     public void installSnapshot(long l, List<Object> list) {
         log.info("Installing Snapshot");
-        return;
+        map.clear();
+        for (Object o : list) {
+            if (o instanceof Map m) {
+                map.putAll(m);
+            } else {
+                throw new IllegalArgumentException(STR."Invalid chunk data. Got: \{o.getClass()}");
+            }
+        }
     }
 
     @Override

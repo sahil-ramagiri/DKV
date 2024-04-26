@@ -33,7 +33,7 @@ public class MessageBus implements Transport {
             return;
         }
 
-        log.info(STR."Send message: \{raftMessage} to \{replicaId.getId()}");
+        log.debug(STR."Send message: \{raftMessage} to \{replicaId.getId()}");
         String url = STR."http://\{replicaId.getHost()}/message";
         HttpEntity<ReplicaMessage> request = new HttpEntity<>(ReplicaMessage.from(raftMessage));
         try {
@@ -52,7 +52,7 @@ public class MessageBus implements Transport {
 
     @Override
     public boolean isReachable(RaftEndpoint raftEndpoint) {
-        log.info(STR."Pinging \{raftEndpoint.getId()}");
+        log.debug(STR."Pinging \{raftEndpoint.getId()}");
 
         if (!(raftEndpoint instanceof ReplicaId replicaId)) {
             log.error("Expecting raftEndpoint of type: ReplicaId , got: {}", raftEndpoint);

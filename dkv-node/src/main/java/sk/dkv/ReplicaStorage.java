@@ -8,12 +8,20 @@ import io.microraft.model.persistence.RaftTermPersistentState;
 import io.microraft.persistence.RaftStore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import sk.dkv.config.ReplicaConfig;
 
 import java.io.IOException;
+import java.util.List;
 
-@Component
+//@Component
 @Slf4j
 public class ReplicaStorage implements RaftStore {
+
+    private final ReplicaConfig replicaConfig;
+
+    public ReplicaStorage(ReplicaConfig replicaConfig) {
+        this.replicaConfig = replicaConfig;
+    }
 
     @Override
     public void persistAndFlushLocalEndpoint(RaftEndpointPersistentState raftEndpointPersistentState) throws IOException {
@@ -33,8 +41,8 @@ public class ReplicaStorage implements RaftStore {
     }
 
     @Override
-    public void persistLogEntry(LogEntry logEntry) throws IOException {
-        log.info(STR."persistLogEntry: \{logEntry}");
+    public void persistLogEntries(List<LogEntry> list) throws IOException {
+        log.info(STR."persistLogEntries: \{list}");
     }
 
     @Override
@@ -45,6 +53,11 @@ public class ReplicaStorage implements RaftStore {
     @Override
     public void truncateLogEntriesFrom(long l) throws IOException {
         log.info(STR."truncateLogEntriesFrom: \{l}");
+    }
+
+    @Override
+    public void truncateLogEntriesUntil(long l) throws IOException {
+
     }
 
     @Override

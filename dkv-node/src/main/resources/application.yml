@@ -7,3 +7,10 @@ logging.level:
       web:
         filter:
           CommonsRequestLoggingFilter: OFF
+  org.jooq.tools.LoggerListener: OFF
+  org.jooq.Constants: OFF
+
+
+spring:
+  main:
+    banner-mode: "off"

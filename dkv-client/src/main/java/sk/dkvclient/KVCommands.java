@@ -30,10 +30,10 @@ public class KVCommands {
         return STR."GET key: \{key} , value: \{value}";
     }
 
-    @ShellMethod(key = "put")
+    @ShellMethod(key = "set")
     public String put(@ShellOption String key, @ShellOption String value) {
         String oldValue = leaderManager.setRequest(key, value);
-        return STR."PUT key: \{key} , value: \{value}, oldValue: \{oldValue}";
+        return STR."SET key: \{key} , value: \{value}, oldValue: \{oldValue}";
     }
 
     @ShellMethod(key = "clear")

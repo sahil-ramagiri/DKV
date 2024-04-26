@@ -199,3 +199,8 @@ README.html
 *.iml
 .idea
 .exercism
+
+## sqlite db logs
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

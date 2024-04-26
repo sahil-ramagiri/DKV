@@ -21,7 +21,7 @@ public class MessageReceiver {
 
     @PostMapping("/message")
     public ResponseEntity<Void> handleMessage(@RequestBody ReplicaMessage message) {
-        log.info("Incoming Message: {}", message);
+        log.debug("Incoming Message: {}", message);
         try {
             raftNode.handle(message.raftMessage);
             return ResponseEntity.ok().build();
@@ -33,7 +33,7 @@ public class MessageReceiver {
 
     @PostMapping("/ping")
     public ResponseEntity<Void> handleMessage(@RequestBody String node) {
-        log.info("Incoming ping from: {}", node);
+        log.debug("Incoming ping from: {}", node);
         return ResponseEntity.ok().build();
     }
 
